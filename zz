@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recetario de Gabriel Achig</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f8f1e2; --paper:#fdfaf2; --line:#e0d0b0;
+  --ink:#1c1508;   --faded:#9a8060;
+  --red:#b83030;   --teal:#1a7a65;  --amber:#c47820;
+  --gold:#e8c870;  --cover:#6e2608; --spine:#4a1604;
+  --violet:#6b3fa0;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+background: radial-gradient(ellipse at 50% 35%, #2e1e0e 0%, #0e0804 100%);
+min-height:100vh;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+overflow:hidden;
+font-family:‘Caveat’,cursive;
+-webkit-user-select:none;user-select:none;
+}
+
+.site-title{
+font-family:‘DM Serif Display’,serif;font-style:italic;
+color:var(–gold);font-size:clamp(.95rem,2.2vw,1.4rem);
+letter-spacing:4px;margin-bottom:12px;
+text-shadow:0 0 30px rgba(232,200,112,.5);
+animation:glow 3s ease-in-out infinite alternate;
+}
+@keyframes glow{
+from{text-shadow:0 0 12px rgba(232,200,112,.3);}
+to  {text-shadow:0 0 32px rgba(232,200,112,.8);}
+}
+
+.lang-bar{
+display:flex;background:rgba(255,255,255,.06);
+border:1px solid rgba(232,200,112,.22);border-radius:30px;
+padding:3px;margin-bottom:16px;
+}
+.lang-btn{
+font-family:‘Caveat’,cursive;font-size:.9rem;padding:5px 20px;
+border:none;background:transparent;color:rgba(232,200,112,.4);
+border-radius:26px;cursor:pointer;transition:all .3s;
+}
+.lang-btn.active{background:var(–gold);color:var(–ink);font-weight:700;}
+
+.book-scene{
+perspective:2400px;
+width:min(96vw,860px);
+height:min(74vh,530px);
+position:relative;
+}
+.book{
+width:100%;height:100%;
+position:relative;transform-style:preserve-3d;
+transform:rotateX(4deg);
+filter:drop-shadow(0 50px 80px rgba(0,0,0,.85));
+}
+
+.book-cover{
+position:absolute;inset:0;
+border-radius:4px 20px 20px 4px;
+background:linear-gradient(135deg,var(–cover) 0%,#9c3810 55%,var(–spine) 100%);
+z-index:0;
+}
+.book-cover::before{
+content:’’;position:absolute;left:0;top:0;bottom:0;width:32px;
+background:var(–spine);border-radius:4px 0 0 4px;
+box-shadow:inset -6px 0 12px rgba(0,0,0,.55);
+}
+.book-cover::after{
+content:’’;position:absolute;inset:14px 14px 14px 42px;
+border:2px solid rgba(232,200,112,.25);border-radius:0 12px 12px 0;
+}
+
+.pages-viewport{
+position:absolute;inset:9px 9px 9px 32px;
+border-radius:0 14px 14px 0;overflow:hidden;
+background:var(–paper);
+}
+.pages-viewport::before{
+content:’’;position:absolute;inset:0;pointer-events:none;z-index:0;
+background-image:repeating-linear-gradient(
+to bottom,transparent,transparent 31px,var(–line) 31px,var(–line) 32px);
+opacity:.4;
+}
+
+.slides-track{
+display:flex;height:100%;
+transition:transform .72s cubic-bezier(.77,0,.175,1);
+position:relative;z-index:1;
+}
+
+@keyframes pageIn{
+from{transform:perspective(1400px) rotateY(-12deg) scale(.97);opacity:.5;}
+to  {transform:perspective(1400px) rotateY(0) scale(1);opacity:1;}
+}
+.flip-anim{animation:pageIn .7s ease both;}
+
+/* COVER SLIDE */
+.cover-slide{
+flex:0 0 100%;height:100%;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+text-align:center;padding:28px;
+background:linear-gradient(155deg,#fdfaf2,#f0e4c4);
+position:relative;overflow:hidden;
+}
+.cover-slide::before{
+content:’’;position:absolute;inset:0;pointer-events:none;
+background-image:repeating-linear-gradient(
+to bottom,transparent,transparent 31px,
+rgba(160,140,90,.25) 31px,rgba(160,140,90,.25) 32px);
+}
+.cover-emoji-ring{
+position:relative;width:140px;height:140px;margin-bottom:14px;
+}
+.cover-emoji-ring .emoji-orbit{
+position:absolute;inset:0;
+animation:coverSpin 8s linear infinite;
+transform-style:preserve-3d;
+}
+.cover-emoji-ring .e{
+position:absolute;font-size:2rem;
+transform-origin:70px 70px;
+}
+@keyframes coverSpin{from{transform:rotateZ(0);}to{transform:rotateZ(360deg);}}
+.cover-center{
+position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+font-size:3.2rem;animation:bounce 2.5s ease-in-out infinite;
+}
+@keyframes bounce{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+.cover-h{
+font-family:‘DM Serif Display’,serif;font-size:clamp(1.9rem,4.5vw,2.6rem);
+color:var(–ink);line-height:1.15;position:relative;margin:6px 0 4px;
+}
+.cover-h span{color:var(–red);font-style:italic;}
+.cover-sub{font-size:1rem;color:var(–faded);position:relative;margin-bottom:20px;}
+.cover-btn{
+position:relative;font-family:‘Caveat’,cursive;font-size:1.1rem;letter-spacing:.5px;
+background:var(–red);color:#fff;border:none;padding:10px 34px;
+border-radius:30px;cursor:pointer;
+box-shadow:0 4px 18px rgba(184,50,50,.4);transition:transform .2s,box-shadow .2s;
+}
+.cover-btn:hover{transform:scale(1.07);box-shadow:0 6px 24px rgba(184,50,50,.5);}
+
+/* RECIPE SLIDE */
+.slide{
+flex:0 0 100%;height:100%;
+position:relative;overflow:hidden;
+}
+
+.inner-track{
+display:flex;width:200%;height:100%;
+transition:transform .55s cubic-bezier(.77,0,.175,1);
+}
+.inner-page{
+width:50%;height:100%;
+padding:22px 28px 16px 28px;
+flex-shrink:0;
+position:relative;
+}
+
+.tab-bar{
+display:flex;gap:0;margin-bottom:14px;
+border-bottom:2px solid var(–line);
+}
+.tab{
+font-family:‘Caveat’,cursive;font-size:1rem;
+padding:5px 18px;border:none;background:transparent;
+color:var(–faded);cursor:pointer;border-bottom:3px solid transparent;
+margin-bottom:-2px;transition:all .25s;letter-spacing:.3px;
+}
+.tab.active{color:var(–ink);font-weight:700;border-bottom-color:var(–red);}
+.tab.active.teal {border-bottom-color:var(–teal);}
+.tab.active.amber{border-bottom-color:var(–amber);}
+
+.r-header{margin-bottom:8px;}
+.cat-tag{
+display:inline-block;font-size:.7rem;font-weight:700;
+letter-spacing:2px;text-transform:uppercase;color:#fff;
+background:var(–red);padding:2px 10px;border-radius:3px;margin-bottom:4px;
+}
+.cat-tag.teal {background:var(–teal);}
+.cat-tag.amber{background:var(–amber);}
+.r-title{
+font-family:‘DM Serif Display’,serif;
+font-size:clamp(1.4rem,3vw,1.9rem);color:var(–ink);line-height:1.1;
+}
+.r-sub{font-size:.92rem;color:var(–faded);margin-top:1px;}
+.divider{border:none;border-top:2px dashed var(–line);margin:8px 0 10px;}
+.meta-row{display:flex;gap:14px;font-size:.9rem;color:var(–faded);flex-wrap:wrap;}
+
+/* INGREDIENTS FLOATING EMOJIS */
+.ing-stage{
+position:relative;
+width:100%;
+height:calc(100% - 130px);
+overflow:hidden;
+}
+
+.ing-item{
+position:absolute;
+display:flex;flex-direction:column;align-items:center;
+cursor:default;
+transform-origin:center center;
+animation:floatItem var(–dur,5s) var(–delay,0s) ease-in-out infinite alternate;
+transition:transform .2s;
+}
+.ing-item:hover{z-index:99;}
+.ing-item:hover .i-emoji{transform:scale(1.25) rotate(8deg);}
+
+.i-emoji{
+font-size:var(–sz,3rem);
+display:block;
+transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+filter:drop-shadow(0 6px 10px rgba(0,0,0,.18));
+animation:spin3d var(–spd,6s) var(–delay,0s) linear infinite;
+}
+@keyframes spin3d{
+0%  {transform:rotateY(0deg);}
+100%{transform:rotateY(360deg);}
+}
+.ing-item:hover .i-emoji{animation-play-state:paused;}
+
+.i-label{
+font-family:‘Caveat’,cursive;font-size:.82rem;
+color:var(–ink);text-align:center;line-height:1.2;
+margin-top:2px;max-width:80px;
+text-shadow:0 1px 3px rgba(255,255,255,.9);
+}
+.i-qty{font-size:.7rem;color:var(–faded);}
+
+@keyframes floatItem{
+from{transform:translateY(0px) rotate(var(–rot0,-3deg));}
+to  {transform:translateY(var(–dy,-12px)) rotate(var(–rot1,3deg));}
+}
+
+.page-hint{
+position:absolute;bottom:10px;right:18px;
+font-family:‘Caveat’,cursive;font-size:.88rem;
+color:var(–faded);display:flex;align-items:center;gap:5px;
+cursor:pointer;transition:color .2s;
+animation:pulse 2s ease-in-out infinite;
+}
+.page-hint:hover{color:var(–ink);}
+@keyframes pulse{0%,100%{opacity:.6;}50%{opacity:1;}}
+
+/* STEPS PAGE */
+.steps-scroll{
+overflow-y:auto;
+height:calc(100% - 130px);
+padding-right:6px;
+scrollbar-width:thin;
+scrollbar-color:var(–line) transparent;
+}
+.steps-scroll::-webkit-scrollbar{width:4px;}
+.steps-scroll::-webkit-scrollbar-thumb{background:var(–line);border-radius:4px;}
+
+.step-item{
+display:flex;gap:14px;
+padding:10px 0 10px;
+border-bottom:1px solid rgba(200,185,150,.4);
+align-items:flex-start;
+}
+.step-num{
+flex-shrink:0;width:30px;height:30px;
+background:var(–red);color:#fff;border-radius:50%;
+font-family:‘DM Serif Display’,serif;font-size:.85rem;
+display:flex;align-items:center;justify-content:center;
+box-shadow:0 3px 8px rgba(184,50,50,.35);
+margin-top:1px;
+}
+.step-num.teal {background:var(–teal);box-shadow:0 3px 8px rgba(26,122,101,.35);}
+.step-num.amber{background:var(–amber);box-shadow:0 3px 8px rgba(196,120,32,.35);}
+
+.step-body{flex:1;}
+.step-title{
+font-family:‘DM Serif Display’,serif;font-size:.95rem;
+color:var(–ink);margin-bottom:2px;
+}
+.step-desc{
+font-family:‘Cormorant Garamond’,serif;font-size:.95rem;
+color:#4a3e28;line-height:1.55;
+}
+
+.note-box{
+margin-top:12px;padding:9px 14px;
+background:#f5edcf;border-left:3px solid var(–amber);
+border-radius:0 6px 6px 0;
+font-family:‘Caveat’,cursive;font-size:.9rem;color:var(–faded);
+line-height:1.55;
+}
+
+/* LANG */
+[data-lang]{display:none;}
+.lang-es [data-lang=“es”]   {display:block;}
+.lang-en [data-lang=“en”]   {display:block;}
+.lang-es [data-lang=“es”].ib{display:inline-block;}
+.lang-en [data-lang=“en”].ib{display:inline-block;}
+
+/* NAV */
+.nav-row{display:flex;align-items:center;gap:14px;margin-top:13px;}
+.nav-btn{
+width:46px;height:46px;border-radius:50%;
+border:2px solid rgba(232,200,112,.28);
+background:rgba(232,200,112,.07);color:var(–gold);
+font-size:1.3rem;cursor:pointer;transition:all .25s;
+display:flex;align-items:center;justify-content:center;
+backdrop-filter:blur(4px);
+}
+.nav-btn:hover:not(:disabled){background:rgba(232,200,112,.2);border-color:var(–gold);transform:scale(1.1);}
+.nav-btn:disabled{opacity:.2;cursor:default;}
+.page-dots{display:flex;gap:7px;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(232,200,112,.2);transition:all .3s;cursor:pointer;}
+.dot.active{background:var(–gold);transform:scale(1.4);}
+</style>
+
+</head>
+<body class="lang-es">
+
+<div class="site-title">✦ Recetario de Gabriel Achig ✦</div>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('es')">🇲🇽 Español</button>
+  <button class="lang-btn"        onclick="setLang('en')">🇺🇸 English</button>
+</div>
+
+<div class="book-scene" id="scene">
+  <div class="book">
+    <div class="book-cover"></div>
+    <div class="pages-viewport">
+      <div class="slides-track" id="track">
+
+```
+    <!-- COVER -->
+    <div class="cover-slide">
+      <div class="cover-emoji-ring">
+        <div class="emoji-orbit">
+          <span class="e" style="transform:rotate(0deg)   translate(55px)">🌶</span>
+          <span class="e" style="transform:rotate(72deg)  translate(55px)">🍅</span>
+          <span class="e" style="transform:rotate(144deg) translate(55px)">🧄</span>
+          <span class="e" style="transform:rotate(216deg) translate(55px)">🌿</span>
+          <span class="e" style="transform:rotate(288deg) translate(55px)">🍋</span>
+        </div>
+        <div class="cover-center">🍳</div>
+      </div>
+      <div class="cover-h" data-lang="es">Recetario de <span>Gabriel Achig</span></div>
+      <div class="cover-h" data-lang="en">Gabriel Achig's <span>Recipe Book</span></div>
+      <div class="cover-sub" data-lang="es">Cocina artesanal · Bilingüe · con amor</div>
+      <div class="cover-sub" data-lang="en">Handmade cooking · Bilingual · with love</div>
+      <button class="cover-btn" onclick="goTo(1)">
+        <span data-lang="es">Abrir recetario →</span>
+        <span data-lang="en">Open the book →</span>
+      </button>
+    </div>
+
+    <!-- RECIPE 1: CHILAQUILES -->
+    <div class="slide" id="s0">
+      <div class="inner-track" id="it0">
+        <div class="inner-page">
+          <div class="r-header">
+            <span class="cat-tag"    data-lang="es">Desayuno</span>
+            <span class="cat-tag ib" data-lang="en">Breakfast</span>
+            <div class="r-title" data-lang="es">Chilaquiles Rojos</div>
+            <div class="r-title" data-lang="en">Red Chilaquiles</div>
+            <div class="r-sub"   data-lang="es">Receta de abuela · 4 porciones · 30 min</div>
+            <div class="r-sub"   data-lang="en">Grandma's recipe · 4 servings · 30 min</div>
+          </div>
+          <hr class="divider">
+          <div class="tab-bar">
+            <button class="tab active" onclick="innerGoTo(0,0,this)">
+              <span data-lang="es">🥬 Ingredientes</span><span data-lang="en">🥬 Ingredients</span>
+            </button>
+            <button class="tab" onclick="innerGoTo(0,1,this)">
+              <span data-lang="es">📋 Proceso</span><span data-lang="en">📋 Steps</span>
+            </button>
+          </div>
+          <div class="ing-stage" id="ing0"></div>
+          <div class="page-hint" onclick="innerGoTo(0,1,null)">
+            <span data-lang="es">Ver proceso</span><span data-lang="en">See steps</span> →
+          </div>
+        </div>
+
+        <div class="inner-page">
+          <div class="r-header">
+            <div class="r-title" data-lang="es">Chilaquiles Rojos</div>
+            <div class="r-title" data-lang="en">Red Chilaquiles</div>
+          </div>
+          <hr class="divider">
+          <div class="tab-bar">
+            <button class="tab" onclick="innerGoTo(0,0,this)">
+              <span data-lang="es">🥬 Ingredientes</span><span data-lang="en">🥬 Ingredients</span>
+            </button>
+            <button class="tab active" onclick="innerGoTo(0,1,this)">
+              <span data-lang="es">📋 Proceso</span><span data-lang="en">📋 Steps</span>
+            </button>
+          </div>
+          <div class="steps-scroll">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Prepara los chiles</div>
+                <div class="step-title" data-lang="en">Prep the chiles</div>
+                <div class="step-desc"  data-lang="es">Retira las semillas y venas de los chiles guajillo. Remójalos en agua muy caliente durante 10 minutos hasta que se suavicen.</div>
+                <div class="step-desc"  data-lang="en">Remove seeds and veins from the guajillo chiles. Soak them in very hot water for 10 minutes until softened.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Licúa la salsa</div>
+                <div class="step-title" data-lang="en">Blend the sauce</div>
+                <div class="step-desc"  data-lang="es">Licúa los chiles escurridos con jitomates, ½ cebolla y 2 dientes de ajo. Sazona con sal. Debe quedar una salsa espesa y tersa.</div>
+                <div class="step-desc"  data-lang="en">Blend the drained chiles with tomatoes, ½ onion and 2 garlic cloves. Season with salt. It should be a thick, smooth sauce.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Fríe la salsa</div>
+                <div class="step-title" data-lang="en">Fry the sauce</div>
+                <div class="step-desc"  data-lang="es">Calienta 2 cucharadas de aceite a fuego medio-alto. Vierte la salsa con cuidado (salpica). Cocina 5–6 minutos moviendo hasta que espese y cambie de color.</div>
+                <div class="step-desc"  data-lang="en">Heat 2 tbsp oil over medium-high heat. Pour in the sauce carefully (it splashes). Cook 5–6 minutes, stirring until it thickens and darkens slightly.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Incorpora los totopos</div>
+                <div class="step-title" data-lang="en">Add the chips</div>
+                <div class="step-desc"  data-lang="es">Agrega 300 g de totopos y mezcla rápidamente para que queden bien bañados en salsa. No dejes que se ablanden demasiado.</div>
+                <div class="step-desc"  data-lang="en">Add 300 g of tortilla chips and mix quickly so they're fully coated. Don't let them get too soggy.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Sirve y decora</div>
+                <div class="step-title" data-lang="en">Plate and garnish</div>
+                <div class="step-desc"  data-lang="es">Sirve de inmediato en platos calientes. Acompaña con crema ácida, queso fresco desmoronado, cebolla morada y huevo estrellado.</div>
+                <div class="step-desc"  data-lang="en">Serve immediately on warm plates. Top with sour cream, crumbled fresh cheese, red onion rings and a fried egg.</div>
+              </div>
+            </div>
+            <div class="note-box">
+              💡 <span data-lang="es">Agrega los totopos al último momento para que no se ablanden. ¡Siempre sirve recién hecho!</span>
+                 <span data-lang="en">Add chips at the last second so they stay crispy. Always serve fresh!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECIPE 2: ARROZ CON LECHE -->
+    <div class="slide" id="s1">
+      <div class="inner-track" id="it1">
+        <div class="inner-page">
+          <div class="r-header">
+            <span class="cat-tag teal"    data-lang="es">Postre</span>
+            <span class="cat-tag teal ib" data-lang="en">Dessert</span>
+            <div class="r-title" data-lang="es">Arroz con Leche</div>
+            <div class="r-title" data-lang="en">Rice Pudding</div>
+            <div class="r-sub"   data-lang="es">Cremoso y canelado · 6 porciones · 45 min</div>
+            <div class="r-sub"   data-lang="en">Creamy &amp; cinnamon-kissed · 6 servings · 45 min</div>
+          </div>
+          <hr class="divider">
+          <div class="tab-bar">
+            <button class="tab active" onclick="innerGoTo(1,0,this)">
+              <span data-lang="es">🥬 Ingredientes</span><span data-lang="en">🥬 Ingredients</span>
+            </button>
+            <button class="tab" onclick="innerGoTo(1,1,this)">
+              <span data-lang="es">📋 Proceso</span><span data-lang="en">📋 Steps</span>
+            </button>
+          </div>
+          <div class="ing-stage" id="ing1"></div>
+          <div class="page-hint" onclick="innerGoTo(1,1,null)">
+            <span data-lang="es">Ver proceso</span><span data-lang="en">See steps</span> →
+          </div>
+        </div>
+
+        <div class="inner-page">
+          <div class="r-header">
+            <div class="r-title" data-lang="es">Arroz con Leche</div>
+            <div class="r-title" data-lang="en">Rice Pudding</div>
+          </div>
+          <hr class="divider">
+          <div class="tab-bar">
+            <button class="tab" onclick="innerGoTo(1,0,this)">
+              <span data-lang="es">🥬 Ingredientes</span><span data-lang="en">🥬 Ingredients</span>
+            </button>
+            <button class="tab active teal" onclick="innerGoTo(1,1,this)">
+              <span data-lang="es">📋 Proceso</span><span data-lang="en">📋 Steps</span>
+            </button>
+          </div>
+          <div class="steps-scroll">
+            <div class="step-item">
+              <div class="step-num teal">1</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Cocina el arroz</div>
+                <div class="step-title" data-lang="en">Cook the rice</div>
+                <div class="step-desc"  data-lang="es">Enjuaga 1 taza de arroz hasta que el agua salga clara. Ponlo a cocer en 2 tazas de agua con 1 rama de canela y una pizca de sal por 10 minutos a fuego medio.</div>
+                <div class="step-desc"  data-lang="en">Rinse 1 cup of rice until water runs clear. Cook in 2 cups water with 1 cinnamon stick and a pinch of salt for 10 minutes over medium heat.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num teal">2</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Agrega la leche</div>
+                <div class="step-title" data-lang="en">Add the milk</div>
+                <div class="step-desc"  data-lang="es">Cuando el arroz haya absorbido el agua, agrega 1 litro de leche entera tibia y la ralladura de 1 limón. Reduce el fuego a bajo.</div>
+                <div class="step-desc"  data-lang="en">Once the rice has absorbed the water, add 1 litre of warm whole milk and the zest of 1 lemon. Reduce heat to low.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num teal">3</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Cocina sin parar de mover</div>
+                <div class="step-title" data-lang="en">Cook while stirring constantly</div>
+                <div class="step-desc"  data-lang="es">Mueve constantemente con una cuchara de madera durante 25 minutos. Raspa el fondo para que no se pegue.</div>
+                <div class="step-desc"  data-lang="en">Stir constantly with a wooden spoon for 25 minutes. Scrape the bottom so it doesn't stick.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num teal">4</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Endulza</div>
+                <div class="step-title" data-lang="en">Sweeten</div>
+                <div class="step-desc"  data-lang="es">Agrega ¾ de taza de azúcar y mezcla bien. Cocina 5 minutos más hasta obtener consistencia cremosa.</div>
+                <div class="step-desc"  data-lang="en">Add ¾ cup of sugar and mix well. Cook 5 more minutes until creamy and coats the spoon.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num teal">5</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Sirve</div>
+                <div class="step-title" data-lang="en">Serve</div>
+                <div class="step-desc"  data-lang="es">Vierte en tazones individuales. Espolvorea canela en polvo. Disfruta caliente o frío.</div>
+                <div class="step-desc"  data-lang="en">Pour into individual bowls. Dust with ground cinnamon. Enjoy warm or chilled.</div>
+              </div>
+            </div>
+            <div class="note-box">
+              💡 <span data-lang="es">¡No dejes de mover ni un segundo! Si se pega al fondo, el sabor se arruina.</span>
+                 <span data-lang="en">Never stop stirring! If it sticks to the bottom, the flavour is ruined.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECIPE 3: AGUA DE JAMAICA -->
+    <div class="slide" id="s2">
+      <div class="inner-track" id="it2">
+        <div class="inner-page">
+          <div class="r-header">
+            <span class="cat-tag amber"    data-lang="es">Bebida</span>
+            <span class="cat-tag amber ib" data-lang="en">Drink</span>
+            <div class="r-title" data-lang="es">Agua de Jamaica</div>
+            <div class="r-title" data-lang="en">Hibiscus Iced Tea</div>
+            <div class="r-sub"   data-lang="es">Refrescante · 5 vasos · 15 min</div>
+            <div class="r-sub"   data-lang="en">Refreshing · 5 glasses · 15 min</div>
+          </div>
+          <hr class="divider">
+          <div class="tab-bar">
+            <button class="tab active" onclick="innerGoTo(2,0,this)">
+              <span data-lang="es">🥬 Ingredientes</span><span data-lang="en">🥬 Ingredients</span>
+            </button>
+            <button class="tab" onclick="innerGoTo(2,1,this)">
+              <span data-lang="es">📋 Proceso</span><span data-lang="en">📋 Steps</span>
+            </button>
+          </div>
+          <div class="ing-stage" id="ing2"></div>
+          <div class="page-hint" onclick="innerGoTo(2,1,null)">
+            <span data-lang="es">Ver proceso</span><span data-lang="en">See steps</span> →
+          </div>
+        </div>
+
+        <div class="inner-page">
+          <div class="r-header">
+            <div class="r-title" data-lang="es">Agua de Jamaica</div>
+            <div class="r-title" data-lang="en">Hibiscus Iced Tea</div>
+          </div>
+          <hr class="divider">
+          <div class="tab-bar">
+            <button class="tab" onclick="innerGoTo(2,0,this)">
+              <span data-lang="es">🥬 Ingredientes</span><span data-lang="en">🥬 Ingredients</span>
+            </button>
+            <button class="tab active amber" onclick="innerGoTo(2,1,this)">
+              <span data-lang="es">📋 Proceso</span><span data-lang="en">📋 Steps</span>
+            </button>
+          </div>
+          <div class="steps-scroll">
+            <div class="step-item">
+              <div class="step-num amber">1</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Hierve el agua</div>
+                <div class="step-title" data-lang="en">Boil the water</div>
+                <div class="step-desc"  data-lang="es">Pon 1 litro de agua en una olla a fuego alto. Espera a que rompa hervor completo con burbujeo intenso.</div>
+                <div class="step-desc"  data-lang="en">Put 1 litre of water in a pot over high heat. Wait for a full rolling boil with vigorous bubbling.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num amber">2</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Infusiona la jamaica</div>
+                <div class="step-title" data-lang="en">Steep the hibiscus</div>
+                <div class="step-desc"  data-lang="es">Apaga el fuego y agrega 1 taza de flor de jamaica seca. Tapa y deja infusionar 10 minutos. El agua se tornará un rojo brillante.</div>
+                <div class="step-desc"  data-lang="en">Turn off heat and add 1 cup of dried hibiscus flowers. Cover and steep 10 minutes. The water will turn a deep, brilliant red.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num amber">3</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Cuela y endulza</div>
+                <div class="step-title" data-lang="en">Strain and sweeten</div>
+                <div class="step-desc"  data-lang="es">Cuela el líquido descartando las flores. Agrega ¾ de taza de azúcar mientras aún está caliente y disuelve bien.</div>
+                <div class="step-desc"  data-lang="en">Strain the liquid, discarding the flowers. Add ¾ cup of sugar while still hot and dissolve completely.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num amber">4</div>
+              <div class="step-body">
+                <div class="step-title" data-lang="es">Enfría y sirve</div>
+                <div class="step-title" data-lang="en">Chill and serve</div>
+                <div class="step-desc"  data-lang="es">Deja enfriar y luego refrigera. Sirve en vasos altos con mucho hielo y unas gotas de limón verde.</div>
+                <div class="step-desc"  data-lang="en">Cool then refrigerate. Serve in tall glasses over lots of ice with a squeeze of fresh lime juice.</div>
+              </div>
+            </div>
+            <div class="note-box">
+              💡 <span data-lang="es">Para agua más intensa, usa 1.5 tazas de jamaica. También puedes endulzar al gusto en cada vaso.</span>
+                 <span data-lang="en">For a stronger flavour, use 1.5 cups of hibiscus. Let each person sweeten their own glass.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /track -->
+</div><!-- /viewport -->
+```
+
+  </div><!-- /book -->
+</div><!-- /scene -->
+
+<div class="nav-row">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>←</button>
+  <div class="page-dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">→</button>
+</div>
+
+<script>
+const INGREDIENTS = [
+  [
+    {e:'🌽',es:'Totopos',        en:'Tortilla chips',  qty:'300 g', sz:'3.2rem', spd:'7s'},
+    {e:'🌶',es:'Chile guajillo', en:'Guajillo chile',  qty:'×4',    sz:'2.8rem', spd:'5.5s'},
+    {e:'🍅',es:'Jitomate',       en:'Tomato',           qty:'×2',    sz:'3rem',   spd:'8s'},
+    {e:'🧅',es:'Cebolla',        en:'Onion',            qty:'½',     sz:'2.6rem', spd:'6s'},
+    {e:'🧄',es:'Ajo',            en:'Garlic',           qty:'×2',    sz:'2.4rem', spd:'9s'},
+    {e:'🥚',es:'Huevo',          en:'Egg',              qty:'×2',    sz:'2.8rem', spd:'6.5s'},
+    {e:'🥛',es:'Crema',          en:'Sour cream',       qty:'gusto', sz:'2.6rem', spd:'7.5s'},
+  ],
+  [
+    {e:'🍚',es:'Arroz',          en:'White rice',       qty:'1 taza', sz:'3.2rem', spd:'8s'},
+    {e:'🥛',es:'Leche entera',   en:'Whole milk',       qty:'1 L',    sz:'3rem',   spd:'6s'},
+    {e:'🍬',es:'Azúcar',         en:'Sugar',            qty:'¾ taza', sz:'2.6rem', spd:'7s'},
+    {e:'🌿',es:'Canela',         en:'Cinnamon',         qty:'1 rama', sz:'2.8rem', spd:'9s'},
+    {e:'🍋',es:'Limón',          en:'Lemon zest',       qty:'×1',     sz:'2.6rem', spd:'5.5s'},
+  ],
+  [
+    {e:'🌺',es:'Flor jamaica',   en:'Hibiscus flowers', qty:'1 taza', sz:'3.4rem', spd:'7s'},
+    {e:'💧',es:'Agua',           en:'Water',            qty:'1 L',    sz:'2.8rem', spd:'6s'},
+    {e:'🍬',es:'Azúcar',         en:'Sugar',            qty:'¾ taza', sz:'2.6rem', spd:'8s'},
+    {e:'🧊',es:'Hielo',          en:'Ice',              qty:'gusto',  sz:'3rem',   spd:'5s'},
+    {e:'🍋',es:'Limón',          en:'Lime',             qty:'×2',     sz:'2.8rem', spd:'9s'},
+  ],
+];
+
+let currentLang = 'es';
+const innerPage = [0, 0, 0];
+
+const POSITIONS = [
+  [8,  10, -14,  -4,  5],
+  [55, 6,  -10,   3, -4],
+  [75, 35, -16,  -3,  6],
+  [60, 65, -12,   5, -3],
+  [25, 68, -10,  -5,  4],
+  [5,  45, -14,   4, -5],
+  [38, 30,  -8,  -2,  3],
+];
+
+function buildIngredients() {
+  INGREDIENTS.forEach((list, ri) => {
+    const stage = document.getElementById('ing' + ri);
+    stage.innerHTML = '';
+    list.forEach((item, i) => {
+      const pos = POSITIONS[i] || POSITIONS[i % POSITIONS.length];
+      const div = document.createElement('div');
+      div.className = 'ing-item';
+      div.style.cssText = `
+        left:${pos[0]}%;top:${pos[1]}%;
+        --sz:${item.sz};--spd:${item.spd};
+        --dur:${3.5 + i * 0.7}s;
+        --delay:${i * 0.4}s;
+        --dy:${pos[2]}px;
+        --rot0:${pos[3]}deg;--rot1:${pos[4]}deg;
+      `;
+      div.innerHTML = `
+        <span class="i-emoji" style="font-size:${item.sz};animation-duration:${item.spd}">${item.e}</span>
+        <span class="i-label">
+          <span data-lang="es">${item.es}</span>
+          <span data-lang="en">${item.en}</span>
+        </span>
+        <span class="i-qty">${item.qty}</span>`;
+      stage.appendChild(div);
+    });
+  });
+  applyLangToStages();
+}
+
+function applyLangToStages() {
+  document.querySelectorAll('.i-label [data-lang]').forEach(el => {
+    el.style.display = (el.dataset.lang === currentLang) ? 'block' : 'none';
+  });
+}
+
+function innerGoTo(recipeIdx, pageIdx, clickedTab) {
+  innerPage[recipeIdx] = pageIdx;
+  const track = document.getElementById('it' + recipeIdx);
+  track.style.transform = `translateX(-${pageIdx * 50}%)`;
+  const slide = document.getElementById('s' + recipeIdx);
+  const allTabs = slide.querySelectorAll('.tab');
+  allTabs.forEach((t, i) => {
+    t.classList.toggle('active', (i % 2) === pageIdx);
+  });
+}
+
+const TOTAL = 4;
+let cur = 0;
+const track   = document.getElementById('track');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const dotsEl  = document.getElementById('dots');
+
+for (let i = 0; i < TOTAL; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function goTo(idx) {
+  cur = Math.max(0, Math.min(idx, TOTAL - 1));
+  track.style.transform = `translateX(-${cur * 100}%)`;
+  const slides = track.children;
+  for (const s of slides) s.classList.remove('flip-anim');
+  void slides[cur].offsetWidth;
+  slides[cur].classList.add('flip-anim');
+  prevBtn.disabled = cur === 0;
+  nextBtn.disabled = cur === TOTAL - 1;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+}
+function navigate(dir) { goTo(cur + dir); }
+
+let sx = null;
+const scene = document.getElementById('scene');
+scene.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive:true});
+scene.addEventListener('touchend',   e => {
+  if (sx===null) return;
+  const dx = e.changedTouches[0].clientX - sx;
+  if (Math.abs(dx) > 38) navigate(dx < 0 ? 1 : -1);
+  sx = null;
+});
+let mx = null;
+scene.addEventListener('mousedown', e => { mx = e.clientX; });
+window.addEventListener('mouseup',  e => {
+  if (mx===null) return;
+  const dx = e.clientX - mx;
+  if (Math.abs(dx) > 38) navigate(dx < 0 ? 1 : -1);
+  mx = null;
+});
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight') navigate(1);
+  if (e.key==='ArrowLeft')  navigate(-1);
+});
+
+function setLang(lang) {
+  currentLang = lang;
+  document.body.className = 'lang-' + lang;
+  document.querySelectorAll('.lang-btn').forEach((b,i) => b.classList.toggle('active', (lang==='es'?0:1)===i));
+  applyLangToStages();
+}
+
+buildIngredients();
+goTo(0);
+</script>
+
+</body>
+</html>
